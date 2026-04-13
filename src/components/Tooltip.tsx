@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 
 interface Props {
   text: string;
@@ -6,31 +7,48 @@ interface Props {
 
 export default function Tooltip({ text }: Props) {
   const [show, setShow] = useState(false);
-  const boxRef = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState({ top: 0, left: 0 });
+  const iconRef = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => {
-    if (show && boxRef.current) {
-      const rect = boxRef.current.getBoundingClientRect();
-      if (rect.left < 8) {
-        boxRef.current.style.left = `${-rect.left + 8}px`;
-      }
-      if (rect.right > window.innerWidth - 8) {
-        boxRef.current.style.left = `${parseFloat(boxRef.current.style.left || '-100') - (rect.right - window.innerWidth + 8)}px`;
-      }
-    }
-  }, [show]);
+  const updatePos = useCallback(() => {
+    if (!iconRef.current) return;
+    const rect = iconRef.current.getBoundingClientRect();
+    let left = rect.left + rect.width / 2 - 140;
+    if (left < 8) left = 8;
+    if (left + 280 > window.innerWidth - 8) left = window.innerWidth - 288;
+    setPos({ top: rect.top - 8, left });
+  }, []);
+
+  const handleEnter = () => {
+    updatePos();
+    setShow(true);
+  };
 
   return (
     <span className="tooltip-wrapper">
       <span
+        ref={iconRef}
         className="tooltip-icon"
-        onClick={() => setShow(!show)}
-        onMouseEnter={() => setShow(true)}
+        onClick={() => { if (show) { setShow(false); } else { handleEnter(); } }}
+        onMouseEnter={handleEnter}
         onMouseLeave={() => setShow(false)}
       >
         ?
       </span>
-      {show && <div ref={boxRef} className="tooltip-box">{text}</div>}
+      {show && createPortal(
+        <div
+          className="tooltip-box"
+          style={{
+            position: 'fixed',
+            top: pos.top,
+            left: pos.left,
+            transform: 'translateY(-100%)',
+          }}
+        >
+          {text}
+        </div>,
+        document.body
+      )}
     </span>
   );
 }
