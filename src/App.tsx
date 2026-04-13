@@ -109,7 +109,7 @@ export default function App() {
           <Card title={`Resultados por Region (${regiones.length} departamentos)`} color="#8b5cf6" defaultOpen={false}
             info="Cada region muestra su avance de conteo y los candidatos mas votados. Haz clic en cada region para ver detalles.">
             {regiones.map((r, i) => (
-              <RegionCard key={r.ubigeo || i} region={r} index={i} />
+              <RegionCard key={r.ubigeo || i} region={r} index={i} todosCandidatos={todosCandidatos} />
             ))}
           </Card>
 
