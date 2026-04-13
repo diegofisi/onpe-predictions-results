@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { NivelConfianza } from './types/onpe.types';
 import { useResumen } from './hooks/useResumen';
+import { useEstratificado } from './hooks/useEstratificado';
 import { getApiUrl } from './services/api';
 import Controls from './components/Controls';
 import GuiaLectura from './components/GuiaLectura';
@@ -9,6 +10,7 @@ import Stat from './components/Stat';
 import ProgressBar from './components/ProgressBar';
 import BarChart from './components/BarChart';
 import CandidateTable from './components/CandidateTable';
+import StratifiedTable from './components/StratifiedTable';
 import RegionCard from './components/RegionCard';
 import './App.css';
 
@@ -20,6 +22,17 @@ export default function App() {
     confianza,
     topN,
   });
+
+  const {
+    data: dataEst,
+    loading: loadingEst,
+    error: errorEst,
+    refresh: refreshEst,
+  } = useEstratificado({ confianza, topN });
+
+  const handleRefresh = async () => {
+    await Promise.all([refresh(), refreshEst()]);
+  };
 
   const conteo = data?.conteoNacional;
   const regiones = data?.regiones ?? [];
@@ -42,7 +55,7 @@ export default function App() {
       <Controls
         confianza={confianza} setConfianza={setConfianza}
         topN={topN} setTopN={setTopN}
-        loading={loading} onRefresh={refresh}
+        loading={loading || loadingEst} onRefresh={handleRefresh}
       />
 
       {/* Error */}
@@ -99,9 +112,46 @@ export default function App() {
             <CandidateTable candidatos={topCandidatos} />
           </Card>
 
+          {/* Estratificado */}
+          {errorEst && (
+            <div className="error-box">
+              <strong>Error estratificado:</strong> {errorEst}
+            </div>
+          )}
+          {dataEst && (
+            <Card title="Prediccion Estratificada (Corrige Sesgo Urbano/Rural)" color="#06b6d4"
+              info="Cada region extrapola por separado con su propio FPC y avance de conteo. Las varianzas se combinan ponderadas por peso regional. Produce intervalos mas amplios pero mas realistas. Compara el margen de error estratificado vs el simple para ver cuanto sesgo habia.">
+              <div className="stat-row">
+                <Stat
+                  label="Metodo"
+                  value="Estratificado"
+                  sub={dataEst.metodo}
+                  tooltip="Extrapola cada region por separado y luego combina. Regiones con poco conteo aportan mas incertidumbre."
+                />
+                <Stat
+                  label="Regiones usadas"
+                  value={dataEst.regiones.length}
+                  sub="cada una con su propio FPC"
+                  tooltip="Cada region tiene su propio avance de conteo y factor de correccion."
+                />
+              </div>
+              <StratifiedTable candidatos={dataEst.topCandidatos} />
+
+              {/* Todos estratificados colapsable */}
+              <details style={{ marginTop: 12 }}>
+                <summary className="btn-link" style={{ cursor: 'pointer' }}>
+                  Ver todos los candidatos estratificados ({dataEst.todosCandidatos.length})
+                </summary>
+                <div style={{ marginTop: 8 }}>
+                  <StratifiedTable candidatos={dataEst.todosCandidatos} />
+                </div>
+              </details>
+            </Card>
+          )}
+
           {/* Todos los candidatos */}
-          <Card title="Todos los Candidatos (Nacional)" color="#64748b" defaultOpen={false}
-            info="Lista completa de todos los candidatos con sus datos extrapolados.">
+          <Card title="Todos los Candidatos (Nacional — Simple)" color="#64748b" defaultOpen={false}
+            info="Lista completa de todos los candidatos con el metodo simple (sin correccion de sesgo).">
             <CandidateTable candidatos={todosCandidatos} />
           </Card>
 

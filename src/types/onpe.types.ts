@@ -51,3 +51,50 @@ export interface ResumenResponse {
 }
 
 export type NivelConfianza = 90 | 95 | 99;
+
+/* ─── Tipos del JSON que devuelve GET /resultados/resumen-estratificado ─── */
+
+export interface RegionEstratificada {
+  ubigeo: string;
+  nombre: string;
+  actasContabilizadas: number;
+  totalActas: number;
+  porcentajeConteo: number;
+  pesoNacional: number;
+  fpcRegion: number;
+}
+
+export interface CandidatoEstratificado {
+  posicion: number;
+  nombreAgrupacionPolitica: string;
+  nombreCandidato: string;
+  totalVotosValidosNacional: number;
+  porcentajeVotosValidosNacional: number;
+  votosExtrapoladosEstratificado: number;
+  porcentajeEstratificado: number;
+  margenErrorEstratificado: number;
+  porcentajeEstratificadoMin: number;
+  porcentajeEstratificadoMax: number;
+  margenErrorSimple: number;
+  diferenciaMargen: number;
+}
+
+export interface ConteoNacionalEstratificado {
+  actasContabilizadasTotal: number;
+  totalActasNacional: number;
+  porcentajeConteoNacional: number;
+  totalVotosValidosContados: number;
+  totalVotosEmitidosContados: number;
+}
+
+export interface ResumenEstratificadoResponse {
+  fechaCalculo: string;
+  nivelConfianza: number;
+  zScore: number;
+  metodo: string;
+  descripcion: string;
+  conteoNacional: ConteoNacionalEstratificado;
+  regiones: RegionEstratificada[];
+  topCandidatos: CandidatoEstratificado[];
+  todosCandidatos: CandidatoEstratificado[];
+}
