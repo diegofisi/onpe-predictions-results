@@ -25,9 +25,7 @@ export default function App() {
   const regiones = data?.regiones ?? [];
   const topCandidatos = data?.topCandidatos ?? [];
   const todosCandidatos = data?.todosCandidatos ?? [];
-  const pctConteo = conteo && conteo.totalActas > 0
-    ? (conteo.actasContabilizadas / conteo.totalActas) * 100
-    : 0;
+  const pctConteo = conteo?.porcentajeConteoNacional ?? 0;
 
   return (
     <div className="app">
@@ -71,12 +69,12 @@ export default function App() {
               />
               <Stat
                 label="Total actas"
-                value={(conteo?.totalActas ?? 0).toLocaleString('es-PE')}
+                value={(conteo?.totalActasNacional ?? 0).toLocaleString('es-PE')}
                 tooltip="Numero total de actas electorales en todo el pais (N en la formula FPC)."
               />
               <Stat
                 label="Actas contadas"
-                value={(conteo?.actasContabilizadas ?? 0).toLocaleString('es-PE')}
+                value={(conteo?.actasContabilizadasTotal ?? 0).toLocaleString('es-PE')}
                 tooltip="Actas ya procesadas y digitadas (n en la formula FPC)."
               />
               <Stat

@@ -1,43 +1,49 @@
 /* ─── Tipos del JSON que devuelve GET /resultados/resumen ─── */
 
 export interface ConteoNacional {
-  totalActas: number;
-  actasContabilizadas: number;
-  porcentajeConteo: number;
+  actasContabilizadasTotal: number;
+  totalActasNacional: number;
+  porcentajeConteoNacional: number;
+  totalVotosValidosContados: number;
+  totalVotosEmitidosContados: number;
+  factorCorreccionPoblacionFinita: number;
 }
 
-export interface CandidatoRegion {
-  nombre: string;
-  organizacionPolitica: string;
-  votos: number;
-  porcentajeVotosValidos: number;
-  votosExtrapolados: number;
-  margenError: number;
-  porcentajeExtrapoladoMin: number;
-  porcentajeExtrapoladoMax: number;
-}
-
-export interface Region {
-  departamento: string;
+export interface VotosPorRegion {
   ubigeo: string;
-  totalActas: number;
-  actasContabilizadas: number;
-  electoresHabiles: number;
-  candidatos: CandidatoRegion[];
+  nombre: string;
+  votos: number;
+  porcentaje: number;
 }
 
 export interface CandidatoNacional {
+  posicion: number;
+  nombreAgrupacionPolitica: string;
   nombreCandidato: string;
-  organizacionPolitica: string;
-  votosTotalNacional: number;
+  totalVotosValidosNacional: number;
   porcentajeVotosValidosNacional: number;
+  votosPorRegion: VotosPorRegion[];
   votosExtrapolados: number;
-  margenError: number;
   porcentajeExtrapoladoMin: number;
   porcentajeExtrapoladoMax: number;
+  margenError: number;
+  margenErrorRelativo: number;
+}
+
+export interface Region {
+  ubigeo: string;
+  nombre: string;
+  porcentajeConteo: number;
+  actasContabilizadas: number;
+  totalActas: number;
+  totalVotosValidos: number;
+  totalVotosEmitidos: number;
 }
 
 export interface ResumenResponse {
+  fechaCalculo: string;
+  nivelConfianza: number;
+  zScore: number;
   conteoNacional: ConteoNacional;
   regiones: Region[];
   topCandidatos: CandidatoNacional[];

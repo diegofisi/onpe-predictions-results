@@ -19,7 +19,7 @@ export default function BarChart({ candidatos, maxShow = 10 }: Props) {
         const pct = c.porcentajeVotosValidosNacional ?? 0;
         const pMin = c.porcentajeExtrapoladoMin ?? pct;
         const pMax = c.porcentajeExtrapoladoMax ?? pct;
-        const color = getColor(c.organizacionPolitica, i);
+        const color = getColor(c.nombreAgrupacionPolitica, i);
 
         return (
           <div key={i} className="bar-item">

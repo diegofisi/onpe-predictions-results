@@ -36,7 +36,7 @@ export default function CandidateTable({ candidatos }: Props) {
           {candidatos.map((c, i) => {
             const pct = c.porcentajeVotosValidosNacional ?? 0;
             const me = c.margenError ?? 0;
-            const color = getColor(c.organizacionPolitica, i);
+            const color = getColor(c.nombreAgrupacionPolitica, i);
             const meClass = me < 1 ? 'me-low' : me < 2 ? 'me-mid' : 'me-high';
 
             return (
@@ -44,7 +44,7 @@ export default function CandidateTable({ candidatos }: Props) {
                 <td className="text-center" style={{ color, fontWeight: 700 }}>{i + 1}</td>
                 <td className="text-left">
                   <div className="candidate-name">{c.nombreCandidato}</div>
-                  <div className="candidate-party">{c.organizacionPolitica}</div>
+                  <div className="candidate-party">{c.nombreAgrupacionPolitica}</div>
                 </td>
                 <td className="text-center">
                   <span className="pct-badge" style={{ color }}>{pct.toFixed(2)}%</span>
