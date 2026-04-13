@@ -15,4 +15,11 @@ body {
   max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  #root {
+    padding: 12px;
+  }
 }

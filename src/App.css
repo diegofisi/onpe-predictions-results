@@ -146,6 +146,11 @@
 .card-body {
   padding: 12px 20px 16px;
 }
+@media (max-width: 768px) {
+  .card-body {
+    padding: 10px 12px 14px;
+  }
+}
 
 /* ─── Stat ─── */
 .stat-row {
@@ -235,6 +240,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+@media (max-width: 768px) {
+  .progress-label {
+    width: 120px;
+    font-size: 11px;
+  }
+}
 .progress-track {
   flex: 1;
   background: #1e293b;
@@ -319,6 +330,15 @@
 /* ─── Table ─── */
 .table-wrapper {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -20px;
+  padding: 0 20px;
+}
+@media (max-width: 768px) {
+  .table-wrapper {
+    margin: 0 -12px;
+    padding: 0 12px;
+  }
 }
 table {
   width: 100%;
