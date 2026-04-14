@@ -93,8 +93,8 @@ export default function App() {
               <Stat
                 label="Regiones activas"
                 value={regiones.length}
-                sub="de 25 departamentos"
-                tooltip="Regiones que devolvieron datos validos de la API de ONPE."
+                sub="incluye exterior"
+                tooltip="Departamentos y sedes del voto extranjero que devolvieron datos validos de la API de ONPE."
               />
             </div>
             <ProgressBar porcentaje={pctConteo} color="#3b82f6" label="Progreso nacional" height={32} />
@@ -156,7 +156,7 @@ export default function App() {
           </Card>
 
           {/* Regiones */}
-          <Card title={`Resultados por Region (${regiones.length} departamentos)`} color="#8b5cf6" defaultOpen={false}
+          <Card title={`Resultados por Region (${regiones.length} ámbitos)`} color="#8b5cf6" defaultOpen={false}
             info="Cada region muestra su avance de conteo y los candidatos mas votados. Haz clic en cada region para ver detalles.">
             {regiones.map((r, i) => (
               <RegionCard key={r.ubigeo || i} region={r} index={i} todosCandidatos={todosCandidatos} />
